@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>square（スクエア）| DECT 1.9GHz デジタル無線機 | 多人数同時通話インカム</title>
+  <meta name="description" content="square（スクエア）は1.9GHz帯DECT準拠方式を採用した多人数同時通話DECTインカムです。伝送遅延約0.05秒、最大8人同時通話、Bluetooth対応、IPX5防水。建設・工事・放送・スポーツ現場に最適なデジタル無線機。">
+  <meta name="keywords" content="SQUARE,スクエア,DECT,無線機,インカム,1.9GHz,同時通話,Bluetooth,防水,建設現場,工事現場,MKI Engineering,幹開発">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a; --dark: #141414; --red: #c8102e; --red-dark: #9e0c24;
+      --white: #ffffff; --gray-100: #f5f5f5; --gray-300: #d0d0d0;
+      --gray-500: #888888; --gray-700: #444444;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; }
+
+    /* ── PASSWORD OVERLAY ── */
+    #pw-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--black);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pw-box {
+      text-align: center; padding: 48px 40px;
+      background: var(--dark);
+      border: 1px solid rgba(200,16,46,0.25);
+      border-radius: 8px;
+      width: 360px;
+    }
+    .pw-logo {
+      font-family: 'Inter', sans-serif; font-size: 40px; font-weight: 800;
+      letter-spacing: -0.04em; color: var(--white); margin-bottom: 8px;
+    }
+    .pw-logo span { color: var(--red); }
+    .pw-sub { font-size: 12px; color: var(--gray-500); margin-bottom: 32px; letter-spacing: 0.06em; }
+    .pw-input {
+      width: 100%; padding: 14px 16px; font-size: 15px;
+      background: var(--black); border: 1px solid var(--gray-700);
+      color: var(--white); border-radius: 4px; outline: none;
+      margin-bottom: 12px; font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .pw-input:focus { border-color: var(--red); }
+    .pw-btn {
+      width: 100%; padding: 14px; font-size: 14px; font-weight: 700;
+      background: var(--red); color: var(--white); border: none;
+      border-radius: 4px; cursor: pointer; transition: background 0.2s;
+      font-family: 'Noto Sans JP', sans-serif;
+    }
+    .pw-btn:hover { background: var(--red-dark); }
+    .pw-error { font-size: 12px; color: var(--red); margin-top: 10px; min-height: 18px; }
+    #main-content { display: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(200,16,46,0.25);
+    }
+    .nav-logo { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--gray-300); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--red); color: var(--white) !important; padding: 8px 20px; border-radius: 4px; font-weight: 700 !important; }
+    .nav-cta:hover { background: var(--red-dark) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; padding: 120px 40px 80px; text-align: center;
+    }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0a0a0a 0%, #1a0508 50%, #0a0a0a 100%); }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(200,16,46,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(200,16,46,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 860px; }
+    .hero-badge { display: inline-block; background: rgba(200,16,46,0.15); border: 1px solid rgba(200,16,46,0.4); color: var(--red); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; padding: 6px 16px; border-radius: 2px; margin-bottom: 32px; text-transform: uppercase; }
+    .hero-logo { font-family: 'Inter', sans-serif; font-size: clamp(72px, 14vw, 140px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; color: var(--white); margin-bottom: 24px; }
+    .hero-logo .sq-red { color: var(--red); }
+    .hero-tagline { font-size: clamp(16px, 2.5vw, 22px); font-weight: 500; color: var(--gray-300); margin-bottom: 48px; line-height: 1.7; }
+    .hero-tagline strong { color: var(--white); font-weight: 700; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 48px; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Inter', sans-serif; font-size: 42px; font-weight: 800; color: var(--white); line-height: 1; }
+    .stat-num .unit { font-size: 20px; font-weight: 600; color: var(--red); }
+    .stat-label { font-size: 12px; color: var(--gray-500); margin-top: 6px; letter-spacing: 0.05em; }
+    .hero-btn { display: inline-block; background: var(--red); color: var(--white); text-decoration: none; font-weight: 700; font-size: 15px; padding: 16px 40px; border-radius: 4px; transition: background 0.2s, transform 0.15s; margin-right: 16px; }
+    .hero-btn:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .hero-btn-outline { display: inline-block; border: 1.5px solid var(--gray-500); color: var(--gray-300); text-decoration: none; font-weight: 500; font-size: 15px; padding: 15px 32px; border-radius: 4px; transition: border-color 0.2s, color 0.2s; }
+    .hero-btn-outline:hover { border-color: var(--white); color: var(--white); }
+    .hero-divider { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--red), transparent); }
+
+    /* ── SECTION ── */
+    section { padding: 96px 40px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--red); text-transform: uppercase; margin-bottom: 12px; }
+    .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 900; line-height: 1.2; margin-bottom: 16px; }
+    .section-sub { font-size: 16px; color: var(--gray-500); max-width: 600px; line-height: 1.8; }
+
+    /* ── FEATURES ── */
+    #features { background: var(--dark); }
+    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; margin-top: 60px; }
+    .feature-card { background: var(--black); padding: 48px 40px; position: relative; overflow: hidden; }
+    .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--red); transition: height 0.4s ease; }
+    .feature-card:hover::before { height: 100%; }
+    .feature-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+    .feature-kanji { font-size: 48px; font-weight: 900; color: rgba(200,16,46,0.15); position: absolute; top: 24px; right: 24px; line-height: 1; writing-mode: vertical-rl; letter-spacing: -0.05em; }
+    .feature-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+    .feature-title span { color: var(--red); }
+    .feature-body { font-size: 14px; color: var(--gray-500); line-height: 1.9; }
+
+    /* ── VIDEO ── */
+    #video { background: var(--black); }
+    .video-wrap { margin-top: 60px; }
+    .video-embed {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: 8px; border: 1px solid rgba(200,16,46,0.2);
+    }
+    .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .video-links { display: flex; gap: 16px; margin-top: 24px; flex-wrap: wrap; }
+    .video-link-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #FF0000; color: var(--white); text-decoration: none;
+      font-weight: 700; font-size: 14px; padding: 12px 24px; border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+    .video-link-btn:hover { opacity: 0.85; }
+    .video-note { font-size: 13px; color: var(--gray-500); margin-top: 16px; line-height: 1.8; }
+
+    /* ── SPEC ── */
+    #spec { background: var(--dark); }
+    .spec-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 60px; align-items: start; }
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table th { text-align: left; padding: 14px 0; font-size: 12px; font-weight: 500; color: var(--gray-500); width: 42%; vertical-align: top; }
+    .spec-table td { padding: 14px 0; font-size: 13px; color: var(--gray-300); }
+    .spec-highlight { color: var(--white) !important; font-weight: 700 !important; }
+    .spec-image-area { background: var(--black); border-radius: 8px; padding: 32px; }
+
+    /* ── ACCESSORIES ── */
+    #accessories { background: var(--black); }
+    .acc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 60px; }
+    .acc-card { background: var(--dark); border-radius: 4px; overflow: hidden; transition: transform 0.2s; }
+    .acc-card:hover { transform: translateY(-4px); }
+    .acc-card img { width: 100%; height: 160px; object-fit: cover; display: block; background: #1a1a1a; }
+    .acc-info { padding: 16px; }
+    .acc-model { font-size: 10px; color: var(--red); font-weight: 700; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .acc-name { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.4; }
+
+    /* ── USE CASES ── */
+    #usecase { background: var(--dark); }
+    .usecase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 60px; }
+    .usecase-card { position: relative; height: 280px; overflow: hidden; background: var(--black); }
+    .usecase-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); }
+    .usecase-text { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; padding: 24px 20px; }
+    .usecase-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .usecase-sub { font-size: 11px; color: var(--gray-300); }
+    .usecase-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+
+    /* ── VEXA ── */
+    #vexa { background: var(--black); }
+    .vexa-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 60px; }
+    .vexa-img-area { display: flex; justify-content: center; align-items: center; background: var(--dark); border-radius: 8px; padding: 48px; min-height: 360px; }
+    .vexa-img-area img { max-width: 100%; max-height: 280px; object-fit: contain; }
+    .vexa-features { display: flex; flex-direction: column; gap: 28px; }
+    .vexa-feature { display: flex; gap: 20px; align-items: flex-start; }
+    .vexa-num { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 800; color: var(--red); line-height: 1; flex-shrink: 0; width: 36px; }
+    .vexa-feature-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .vexa-feature-body { font-size: 13px; color: var(--gray-500); line-height: 1.8; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--dark); }
+    .contact-box { background: var(--black); border: 1px solid rgba(200,16,46,0.2); border-radius: 8px; padding: 64px; text-align: center; margin-top: 60px; }
+    .contact-title { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+    .contact-sub { font-size: 15px; color: var(--gray-500); margin-bottom: 40px; }
+    .contact-info { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
+    .contact-item { text-align: center; }
+    .contact-item-label { font-size: 11px; color: var(--gray-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+    .contact-item-value { font-size: 18px; font-weight: 700; color: var(--white); }
+    .contact-item-value a { color: var(--red); text-decoration: none; }
+    .contact-item-value a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); border-top: 1px solid rgba(255,255,255,0.06); padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 800; color: var(--white); }
+    .footer-logo span { color: var(--red); }
+    .footer-company { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+    .footer-copy { font-size: 12px; color: var(--gray-700); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      section { padding: 64px 20px; }
+      .hero { padding: 100px 20px 64px; }
+      .hero-stats { gap: 28px; }
+      .stat-num { font-size: 32px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .spec-wrap { grid-template-columns: 1fr; }
+      .acc-grid { grid-template-columns: repeat(2, 1fr); }
+      .usecase-grid { grid-template-columns: repeat(2, 1fr); }
+      .vexa-wrap { grid-template-columns: 1fr; }
+      .contact-box { padding: 40px 24px; }
+      footer { flex-direction: column; text-align: center; }
+      .pw-box { width: 90%; padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PASSWORD OVERLAY -->
+<div id="pw-overlay">
+  <div class="pw-box">
+    <div class="pw-logo">s<span>q</span>uare</div>
+    <div class="pw-sub">このページはパスワードで保護されています</div>
+    <input type="password" class="pw-input" id="pw-input" placeholder="パスワードを入力" autocomplete="off">
+    <button class="pw-btn" id="pw-btn">入力</button>
+    <div class="pw-error" id="pw-error"></div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+
+<!-- NAV -->
+<nav>
+  <a href="#top" class="nav-logo">s<span>q</span>uare</a>
+  <ul class="nav-links">
+    <li><a href="#features">特長</a></li>
+    <li><a href="#video">動画</a></li>
+    <li><a href="#spec">仕様</a></li>
+    <li><a href="#accessories">アクセサリ</a></li>
+    <li><a href="#vexa">VEXA</a></li>
+    <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">多人数同時通話 DECT インカム</div>
+    <div class="hero-logo">s<span class="sq-red">q</span>uare</div>
+    <p class="hero-tagline">
+      <strong>あなたの声はそのままに、現場を伝える。</strong><br>
+      過酷で繊細なインフラ。クリアで遅延のない、今までにない現場管理の「核」に。
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">0.05<span class="unit">秒</span></div>
+        <div class="stat-label">超低遅延</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">8<span class="unit">人</span></div>
+        <div class="stat-label">最大同時通話</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">300<span class="unit">m</span></div>
+        <div class="stat-label">見通し通話距離</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">IPX<span class="unit">5</span></div>
+        <div class="stat-label">防水性能</div>
+      </div>
+    </div>
+    <a href="#video" class="hero-btn">動画を見る</a>
+    <a href="#contact" class="hero-btn-outline">お問い合わせ</a>
+  </div>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">従来インカムの悩みを解決する<br>4つの特性</h2>
+    <p class="section-sub">現場のコミュニケーションを支える重要なインフラとして、squareは真正面から課題に向き合い開発されました。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-kanji">安定</span>
+        <span class="feature-icon">📡</span>
+        <h3 class="feature-title"><span>安定性</span> ── 混雑しにくい 1.9GHz帯</h3>
+        <p class="feature-body">2.4GHz/5GHz帯（Bluetooth・Wi-Fi）との干渉がなく、人が多く集まるイベント会場や無線機を多数使用する現場でも混信のないクリアな通信を実現。伝送遅延は極めて小さい約0.05秒です。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-kanji">操作</span>
+        <span class="feature-icon">🎛️</span>
+        <h3 class="feature-title"><span>操作性</span> ── シンプルな設計で即戦力</h3>
+        <p class="feature-body">細かいチャンネル設定や煩雑な個別設定は不要。必要なのは親機と子機のペアリングのみ。音量・マイク感度・サイドトーンのオンオフはボタン一つで変更可能。現場に持ち込んだその日から使えます。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-kanji">堅牢</span>
+        <span class="feature-icon">🛡️</span>
+        <h3 class="feature-title"><span>堅牢性</span> ── 落としても雨に濡れても</h3>
+        <p class="feature-body">衝撃が集中しやすい角をコーナーガードで補強。本体だけでなくジャックやUSB端子まで防水対応（IPX5）。MIL-STD-810H準拠の落下耐性により、過酷な現場環境でのインフラをサポートします。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-kanji">機能</span>
+        <span class="feature-icon">🔵</span>
+        <h3 class="feature-title"><span>機能性</span> ── Bluetooth対応 軽量80g</h3>
+        <p class="feature-body">square本体を操作しなくてもBluetoothデバイスでトークのオン/オフが可能。胸ポケットに収まるわずか80gの軽量コンパクトボディ。イヤホンジャック装備で有線デバイスも使用可能。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+  <div class="container">
+    <div class="section-label">Movie</div>
+    <h2 class="section-title">square 紹介動画</h2>
+    <p class="section-sub">実際の使用シーンや操作方法をご覧ください。</p>
+    <div class="video-wrap">
+      <div class="video-embed">
+        <iframe
+          src="https://www.youtube.com/embed/vKa7bD4JtFo"
+          title="square DECT インカム 紹介動画"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-links">
+        <a href="https://www.youtube.com/watch?v=vKa7bD4JtFo" target="_blank" rel="noopener" class="video-link-btn">
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="currentColor"><path d="M19.6 2.2A2.5 2.5 0 0 0 17.8.4C16.3 0 10 0 10 0S3.7 0 2.2.4A2.5 2.5 0 0 0 .4 2.2C0 3.7 0 7 0 7s0 3.3.4 4.8A2.5 2.5 0 0 0 2.2 13.6C3.7 14 10 14 10 14s6.3 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8C20 10.3 20 7 20 7s0-3.3-.4-4.8zM8 10V4l5.2 3L8 10z"/></svg>
+          YouTubeで見る
+        </a>
+      </div>
+      <p class="video-note">※ 今後、使い方の解説動画や現場導入事例の動画を順次公開予定です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- SPEC -->
+<section id="spec">
+  <div class="container">
+    <div class="section-label">Specifications</div>
+    <h2 class="section-title">製品仕様</h2>
+    <p class="section-sub">現場が求めるすべての性能を、80gのボディに凝縮しました。</p>
+    <div class="spec-wrap">
+      <table class="spec-table">
+        <tr><th>製品名</th><td class="spec-highlight">square（スクエア）</td></tr>
+        <tr><th>通信周波数帯域</th><td>1893.5〜1906.1 MHz</td></tr>
+        <tr><th>通信方式</th><td>時分割多元接続（TDMA）</td></tr>
+        <tr><th>定格出力</th><td>最大100mW</td></tr>
+        <tr><th>伝送周波数帯域</th><td>100 Hz〜7.2 kHz</td></tr>
+        <tr><th>チャンネル数</th><td>6チャンネル</td></tr>
+        <tr><th>最大同時通話人数</th><td class="spec-highlight">8人</td></tr>
+        <tr><th>通話距離</th><td class="spec-highlight">見通し約300m</td></tr>
+        <tr><th>伝送遅延</th><td class="spec-highlight">約0.05秒</td></tr>
+        <tr><th>連続使用時間</th><td>親機：最大約8時間<br>子機（有線）：最大約14時間<br>子機（Bluetooth）：最大約10時間</td></tr>
+        <tr><th>防水性能</th><td class="spec-highlight">IPX5</td></tr>
+        <tr><th>落下耐性</th><td>MIL-STD-810H 準拠</td></tr>
+        <tr><th>電池容量</th><td>850mAh / DC3.7V 充電式リチウムイオン電池</td></tr>
+        <tr><th>充電ポート</th><td>USB Type-C</td></tr>
+        <tr><th>使用温度範囲</th><td>-10〜+60℃</td></tr>
+        <tr><th>サイズ</th><td>W69 × H69 × D25 mm（クリップ含まず）</td></tr>
+        <tr><th>重量</th><td class="spec-highlight">80g</td></tr>
+        <tr><th>充電時間</th><td>約2.5時間</td></tr>
+        <tr><th>Bluetoothバージョン</th><td>Bluetooth 5.2</td></tr>
+        <tr><th>製造国</th><td>日本</td></tr>
+      </table>
+      <div class="spec-image-area">
+        <div style="text-align:center; padding: 20px 0;">
+          <div style="font-family:'Inter',sans-serif; font-size:64px; font-weight:800; color:rgba(255,255,255,0.06); letter-spacing:-0.04em; line-height:1;">square</div>
+          <div style="margin-top:24px; display:inline-flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">1.9GHz DECT</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">Bluetooth 5.2</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">IPX5</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">MIL-STD-810H</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">Made in Japan</span>
+          </div>
+          <div style="margin-top:40px; font-size:13px; color:#444; line-height:1.8;">
+            カタログPDFのご請求はお問い合わせください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESSORIES -->
+<section id="accessories">
+  <div class="container">
+    <div class="section-label">Accessories</div>
+    <h2 class="section-title">専用アクセサリ</h2>
+    <p class="section-sub">現場環境に応じた豊富なラインナップ。有線・Bluetoothいずれにも対応します。</p>
+    <div class="acc-grid">
+      <div class="acc-card">
+        <img src="ヘッドセット型マイクIMG_0861.jpg" alt="オーバーヘッドセット SSH-1117" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSH-1117</div><div class="acc-name">オーバーヘッドセット（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="ダミーヘッドヘルメット口元マイクIMG_0899.jpg" alt="ヘルメット装着マイク SSH-1123" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSH-1123</div><div class="acc-name">ヘルメット装着マイク（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="ダミーヘッド首かけ口元マイク.jpg" alt="ネックセット SSN-1059" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSN-1059</div><div class="acc-name">ネックセット（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="ダミーヘッド頭かけ口元マイクIMG_0885_1.jpg" alt="タイピンマイク SSP-1130" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSP-1130</div><div class="acc-name">タイピンマイク（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="ダミーヘッド首太マイクIMG_0878_1.jpg" alt="スロートマイク SSI-1028" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSI-1028</div><div class="acc-name">スロートマイク（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="緑のヘッドホンIMG_0864.jpg" alt="ヘッドセット型 SSH-1115" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSH-1115</div><div class="acc-name">ヘッドセット型（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="クリップマイクIMG_0854_1.jpg" alt="ラベリアマイク SSM-1071" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSM-1071</div><div class="acc-name">ラベリアマイク</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="vexa_IMG_0912.jpg" alt="Bluetoothヘッドセット VEXA SSW-1121" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSW-1121</div><div class="acc-name">Bluetoothヘッドセット VEXA（ヴェクサ）</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecase">
+  <div class="container">
+    <div class="section-label">Use Cases</div>
+    <h2 class="section-title">今、この瞬間を共有するsquare</h2>
+    <p class="section-sub">プロフェッショナルが求めるリアルタイム通信を、あらゆる現場で。</p>
+    <div class="usecase-grid">
+      <div class="usecase-card" style="background:linear-gradient(135deg,#1a1010,#2a1515);">
+        <div class="usecase-text"><span class="usecase-icon">🏗️</span><div class="usecase-title">建設・工事現場</div><div class="usecase-sub">騒音環境でも高い技術とチーム連携を実現</div></div>
+      </div>
+      <div class="usecase-card" style="background:linear-gradient(135deg,#101a10,#152a15);">
+        <div class="usecase-text"><span class="usecase-icon">🏗️</span><div class="usecase-title">クレーン作業</div><div class="usecase-sub">リアルタイムなコミュニケーションが要求される現場</div></div>
+      </div>
+      <div class="usecase-card" style="background:linear-gradient(135deg,#10101a,#15152a);">
+        <div class="usecase-text"><span class="usecase-icon">📺</span><div class="usecase-title">放送業界</div><div class="usecase-sub">両手を塞がず機材操作やカメラワークに集中</div></div>
+      </div>
+      <div class="usecase-card" style="background:linear-gradient(135deg,#1a1510,#2a2015);">
+        <div class="usecase-text"><span class="usecase-icon">🏆</span><div class="usecase-title">スポーツ現場</div><div class="usecase-sub">正確で迅速な判断が要求されるプロの現場</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VEXA -->
+<section id="vexa">
+  <div class="container">
+    <div class="section-label">Option</div>
+    <h2 class="section-title">Bluetoothヘッドセット<br>VEXA（ヴェクサ）</h2>
+    <p class="section-sub">square専用のBluetoothヘッドセット。squareとの連携で、より円滑な現場管理を可能にします。</p>
+    <div class="vexa-wrap">
+      <div class="vexa-img-area">
+        <img src="vexa_IMG_0912.jpg" alt="VEXA Bluetoothヘッドセット SSW-1121">
+      </div>
+      <div class="vexa-features">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--gray-500);letter-spacing:0.08em;margin-bottom:8px;">MODEL</div>
+          <div style="font-size:20px;font-weight:700;">SSW-1121</div>
+          <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">連続使用時間 約14時間 / Type-C充電</div>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:12px 0;">
+        <p style="font-size:13px;color:var(--gray-500);line-height:1.8;margin-bottom:8px;">プロフェッショナルのための3つのコア機能</p>
+        <div class="vexa-feature">
+          <div class="vexa-num">❶</div>
+          <div><div class="vexa-feature-title">ボイスコマンド</div><div class="vexa-feature-body">マイクのON/OFFや音量操作、電話着信応答を「声」だけで操作。手が離せない作業中でも快適なコミュニケーションが可能です。</div></div>
+        </div>
+        <div class="vexa-feature">
+          <div class="vexa-num">❷</div>
+          <div><div class="vexa-feature-title">サイドトーン</div><div class="vexa-feature-body">Bluetooth使用時でも遅延なく、違和感のない自然なサイドトーンを提供。長時間の使用でも疲れにくい設計です。</div></div>
+        </div>
+        <div class="vexa-feature">
+          <div class="vexa-num">❸</div>
+          <div><div class="vexa-feature-title">マルチポイント</div><div class="vexa-feature-body">squareとスマートフォンの同時接続に対応。squareの接続を維持したまま、スマートフォンからの電話応答が可能です。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">お問い合わせ</h2>
+    <p class="section-sub">製品に関するご質問、デモのご依頼、お見積もりなどお気軽にご連絡ください。</p>
+    <div class="contact-box">
+      <h3 class="contact-title">square についてお気軽にご相談ください</h3>
+      <p class="contact-sub">カタログPDFのご請求、導入相談、販売店のご案内も承っております。</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-value"><a href="mailto:info@mki-engineering.jp">info@mki-engineering.jp</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">Company</div>
+          <div class="contact-item-value">幹開発株式会社<br><span style="font-size:13px;font-weight:400;color:var(--gray-500);">MKI Engineering Co., Ltd.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">s<span>q</span>uare</div>
+    <div class="footer-company">幹開発株式会社 / MKI Engineering Co., Ltd.</div>
+  </div>
+  <div class="footer-copy">&copy; 2026 MKI Engineering Co., Ltd. All rights reserved.</div>
+</footer>
+
+</div><!-- /main-content -->
+
+<script>
+  (function() {
+    const PASS = 'square2026_MKI';
+    const SESSION_KEY = 'sq_auth';
+
+    function unlock() {
+      document.getElementById('pw-overlay').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      sessionStorage.setItem(SESSION_KEY, '1');
+    }
+
+    // セッション中は再入力不要
+    if (sessionStorage.getItem(SESSION_KEY) === '1') { unlock(); return; }
+
+    document.getElementById('pw-btn').addEventListener('click', check);
+    document.getElementById('pw-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') check();
+    });
+
+    function check() {
+      const val = document.getElementById('pw-input').value;
+      if (val === PASS) {
+        unlock();
+      } else {
+        document.getElementById('pw-error').textContent = 'パスワードが正しくありません';
+        document.getElementById('pw-input').value = '';
+        document.getElementById('pw-input').focus();
+      }
+    }
+  })();
+</script>
+
+</body>
+</html>
