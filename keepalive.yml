@@ -1,0 +1,32 @@
+name: Supabase Keep-Alive
+
+# Supabase無料プランは7日間APIアクセスが無いと自動停止する。
+# それを防ぐため、定期的にnewsテーブルへ軽いクエリを投げてプロジェクトを起こしておく。
+
+on:
+  schedule:
+    # 3日ごと（毎月 1,4,7,10,13,16,19,22,25,28,31日）の 00:17 UTC = 日本時間 09:17 に実行
+    - cron: '17 0 */3 * *'
+  workflow_dispatch:   # 手動実行も可能（Actionsタブから「Run workflow」）
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          echo "Pinging Supabase to keep the project awake..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${SUPABASE_URL}/rest/v1/news?select=id&limit=1" \
+            -H "apikey: ${SUPABASE_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_KEY}")
+          echo "HTTP status: ${HTTP_CODE}"
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ Keep-alive succeeded."
+          else
+            echo "❌ Keep-alive failed with status ${HTTP_CODE}"
+            exit 1
+          fi
+        env:
+          SUPABASE_URL: 'https://adatzeolzkjujtuxebrc.supabase.co'
+          SUPABASE_KEY: 'sb_publishable_2Ghe-V3dLS7Ym06p71i33A_zFU8eJgz'

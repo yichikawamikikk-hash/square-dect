@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>square（スクエア）| DECT 1.9GHz デジタル無線機 | 多人数同時通話インカム</title>
+  <meta name="description" content="square（スクエア）は1.9GHz帯DECT準拠方式を採用した多人数同時通話DECTインカムです。伝送遅延約0.05秒、最大8人同時通話、Bluetooth対応、IPX5防水。建設・工事・放送・スポーツ現場に最適なデジタル無線機。">
+  <meta name="keywords" content="SQUARE,スクエア,DECT,無線機,インカム,1.9GHz,同時通話,Bluetooth,防水,建設現場,工事現場,MKI Engineering,幹開発">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0a0a0a; --dark: #141414; --red: #c8102e; --red-dark: #9e0c24;
+      --white: #ffffff; --gray-100: #f5f5f5; --gray-300: #d0d0d0;
+      --gray-500: #888888; --gray-700: #444444;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans JP', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; }
+
+    #main-content { display: block; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(10,10,10,0.92); backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(200,16,46,0.25);
+    }
+    .nav-logo { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--gray-300); text-decoration: none; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { background: var(--red); color: var(--white) !important; padding: 8px 20px; border-radius: 4px; font-weight: 700 !important; }
+    .nav-cta:hover { background: var(--red-dark) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden; padding: 120px 40px 80px; text-align: center;
+    }
+    .hero-bg { position: absolute; inset: 0; z-index: 0; background: linear-gradient(135deg, #0a0a0a 0%, #1a0508 50%, #0a0a0a 100%); }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-image: linear-gradient(rgba(200,16,46,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(200,16,46,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-badge { display: inline-block; background: rgba(200,16,46,0.15); border: 1px solid rgba(200,16,46,0.4); color: var(--red); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; padding: 6px 16px; border-radius: 2px; margin-bottom: 32px; text-transform: uppercase; }
+    .hero-logo { font-family: 'Inter', sans-serif; font-size: clamp(72px, 14vw, 140px); font-weight: 800; letter-spacing: -0.04em; line-height: 0.9; color: var(--white); margin-bottom: 24px; }
+    .hero-logo .sq-red { color: var(--red); }
+    .hero-logo-text { font-family: 'Inter', sans-serif; font-size: clamp(64px, 11vw, 120px); font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; color: var(--white); margin-bottom: 20px; }
+    .hero-logo-text .sq-red { color: var(--red); }
+    .hero-logo-img { margin: 0 0 24px; line-height: 0; }
+    .hero-catch { font-size: clamp(22px, 3.4vw, 36px); font-weight: 900; color: var(--white); line-height: 1.35; margin-bottom: 20px; letter-spacing: 0.01em; }
+    .hero-tagline { font-size: clamp(16px, 2.5vw, 22px); font-weight: 500; color: var(--gray-300); margin-bottom: 48px; line-height: 1.7; }
+    .hero-tagline strong { color: var(--white); font-weight: 700; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 48px; }
+    .stat { text-align: center; }
+    .stat-num { font-family: 'Inter', sans-serif; font-size: 42px; font-weight: 800; color: var(--white); line-height: 1; }
+    .stat-num .unit { font-size: 20px; font-weight: 600; color: var(--red); }
+    .stat-label { font-size: 12px; color: var(--gray-500); margin-top: 6px; letter-spacing: 0.05em; }
+    .hero-btn { display: inline-block; background: var(--red); color: var(--white); text-decoration: none; font-weight: 700; font-size: 15px; padding: 16px 40px; border-radius: 4px; transition: background 0.2s, transform 0.15s; margin-right: 16px; }
+    .hero-btn:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .hero-btn-outline { display: inline-block; border: 1.5px solid var(--gray-500); color: var(--gray-300); text-decoration: none; font-weight: 500; font-size: 15px; padding: 15px 32px; border-radius: 4px; transition: border-color 0.2s, color 0.2s; }
+    .hero-btn-outline:hover { border-color: var(--white); color: var(--white); }
+    .hero-divider { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--red), transparent); }
+
+
+    /* HERO 2-column */
+    .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; max-width: 1100px; margin: 0 auto; text-align: left; position: relative; z-index: 2; }
+    .hero-content { max-width: 100%; }
+    .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+    .hero-img-main { width: 75%; position: relative; z-index: 3; filter: drop-shadow(0 24px 48px rgba(200,16,46,0.3)); animation: heroFloat 4s ease-in-out infinite; }
+    .hero-img-sub1 { position: absolute; width: 52%; top: -5%; right: -5%; z-index: 2; opacity: 0.55; filter: blur(1px) drop-shadow(0 8px 24px rgba(21,101,192,0.3)); transform: rotate(8deg); }
+    .hero-img-sub2 { position: absolute; width: 52%; bottom: -5%; left: -5%; z-index: 1; opacity: 0.4; filter: blur(2px) drop-shadow(0 8px 24px rgba(46,125,50,0.3)); transform: rotate(-8deg); }
+    @keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+    @media (max-width: 768px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; }
+      .hero-visual { margin-top: 40px; }
+      .hero-stats { justify-content: center; }
+    }
+
+    /* ── SECTION ── */
+    section { padding: 96px 40px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: var(--red); text-transform: uppercase; margin-bottom: 12px; }
+    .section-title { font-size: clamp(28px, 4vw, 44px); font-weight: 900; line-height: 1.2; margin-bottom: 16px; }
+    .section-sub { font-size: 16px; color: var(--gray-500); max-width: 600px; line-height: 1.8; }
+
+    /* ── FEATURES ── */
+    #features { background: var(--dark); }
+    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; margin-top: 60px; }
+    .feature-card { background: var(--black); padding: 48px 40px; position: relative; overflow: hidden; }
+    .feature-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0; background: var(--red); transition: height 0.4s ease; }
+    .feature-card:hover::before { height: 100%; }
+    .feature-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+    .feature-kanji { font-size: 48px; font-weight: 900; color: rgba(200,16,46,0.15); position: absolute; top: 24px; right: 24px; line-height: 1; writing-mode: vertical-rl; letter-spacing: -0.05em; }
+    .feature-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+    .feature-title span { color: var(--red); }
+    .feature-body { font-size: 14px; color: var(--gray-500); line-height: 1.9; }
+
+    /* ── VIDEO ── */
+    #video { background: var(--black); }
+    .video-wrap { margin-top: 60px; }
+    .video-embed {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border-radius: 8px; border: 1px solid rgba(200,16,46,0.2);
+    }
+    .video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .video-links { display: flex; gap: 16px; margin-top: 24px; flex-wrap: wrap; }
+    .video-link-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #FF0000; color: var(--white); text-decoration: none;
+      font-weight: 700; font-size: 14px; padding: 12px 24px; border-radius: 4px;
+      transition: opacity 0.2s;
+    }
+    .video-link-btn:hover { opacity: 0.85; }
+    .video-note { font-size: 13px; color: var(--gray-500); margin-top: 16px; line-height: 1.8; }
+
+    /* ── SPEC ── */
+    #spec { background: var(--dark); }
+    .spec-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 60px; align-items: start; }
+    .spec-table { width: 100%; border-collapse: collapse; }
+    .spec-table tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .spec-table tr:last-child { border-bottom: none; }
+    .spec-table th { text-align: left; padding: 14px 0; font-size: 12px; font-weight: 500; color: var(--gray-500); width: 42%; vertical-align: top; }
+    .spec-table td { padding: 14px 0; font-size: 13px; color: var(--gray-300); }
+    .spec-highlight { color: var(--white) !important; font-weight: 700 !important; }
+    .spec-image-area { background: var(--black); border-radius: 8px; padding: 32px; }
+
+    /* ── CERTIFICATION ── */
+    #cert { background: var(--black); }
+    .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px; }
+    .cert-card { background: var(--dark); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 40px 36px; position: relative; overflow: hidden; }
+    .cert-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: var(--red); opacity: 0.8; }
+    .cert-head { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .cert-mark { flex-shrink: 0; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: var(--black); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
+    .cert-mark img { max-width: 80%; max-height: 80%; object-fit: contain; }
+    .cert-mark-giteki { font-family: 'Inter', sans-serif; font-weight: 800; color: var(--white); font-size: 12px; letter-spacing: -0.02em; text-align: center; line-height: 1.1; }
+    .cert-title { font-size: 18px; font-weight: 700; color: var(--white); line-height: 1.3; }
+    .cert-title small { display: block; font-size: 11px; font-weight: 500; color: var(--gray-500); letter-spacing: 0.06em; margin-top: 4px; }
+    .cert-badge-ok { display: inline-block; background: rgba(46,125,50,0.15); border: 1px solid rgba(46,125,50,0.5); color: #66bb6a; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 2px; margin-bottom: 16px; }
+    .cert-body { font-size: 13px; color: var(--gray-500); line-height: 1.9; }
+    .cert-numbers { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.08); }
+    .cert-num-row { display: flex; justify-content: space-between; gap: 16px; padding: 6px 0; font-size: 12px; }
+    .cert-num-label { color: var(--gray-500); flex-shrink: 0; }
+    .cert-num-value { color: var(--gray-300); font-family: 'Inter', sans-serif; font-weight: 600; text-align: right; word-break: break-all; }
+    .cert-note { margin-top: 28px; font-size: 11px; color: var(--gray-700); line-height: 1.8; }
+    @media (max-width: 900px) { .cert-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .cert-grid { grid-template-columns: 1fr; } }
+
+    /* ── ACCESSORIES ── */
+    #accessories { background: var(--black); }
+    .acc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 60px; }
+    .acc-card { background: var(--dark); border-radius: 4px; overflow: hidden; transition: transform 0.2s; }
+    .acc-card:hover { transform: translateY(-4px); }
+    .acc-card img { width: 100%; height: 200px; object-fit: contain; display: block; background: #fff; padding: 12px; box-sizing: border-box; }
+    .acc-noimg { width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; background: #f0f0f0; color: #999; box-sizing: border-box; }
+    .acc-noimg span { font-size: 11px; letter-spacing: 0.1em; font-weight: 600; }
+    .acc-noimg svg { width: 40px; height: 40px; opacity: 0.45; }
+    .acc-info { padding: 16px; }
+    .acc-model { font-size: 10px; color: var(--red); font-weight: 700; letter-spacing: 0.08em; margin-bottom: 4px; }
+    .acc-name { font-size: 13px; font-weight: 600; color: var(--white); line-height: 1.4; }
+
+    /* ── USE CASES ── */
+    #usecase { background: var(--dark); }
+    .usecase-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 60px; }
+    .usecase-card { position: relative; height: 280px; overflow: hidden; background: var(--black); }
+    .usecase-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); }
+    .usecase-text { position: absolute; bottom: 0; left: 0; right: 0; z-index: 2; padding: 24px 20px; }
+    .usecase-title { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .usecase-sub { font-size: 11px; color: var(--gray-300); }
+    .usecase-icon { font-size: 32px; margin-bottom: 8px; display: block; }
+
+    /* ── NEWS ── */
+    #news { background: var(--black); }
+    .news-list { margin-top: 60px; display: flex; flex-direction: column; gap: 0; }
+    .news-item { display: flex; gap: 24px; align-items: center; padding: 24px 0; border-top: 1px solid rgba(255,255,255,0.1); text-decoration: none; transition: opacity 0.2s; }
+    .news-item:last-child { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .news-item:hover { opacity: 0.7; }
+    .news-thumb { width: 160px; height: 100px; flex-shrink: 0; object-fit: cover; border-radius: 4px; background: var(--dark); }
+    .news-body { flex: 1; min-width: 0; }
+    .news-date { font-size: 12px; color: var(--red); font-weight: 700; letter-spacing: 0.06em; margin-bottom: 6px; }
+    .news-title { font-size: 17px; font-weight: 700; color: var(--white); line-height: 1.4; }
+    .news-arrow { color: var(--gray-300); font-size: 20px; flex-shrink: 0; }
+    .news-more { margin-top: 40px; text-align: center; }
+    .news-more a { display: inline-block; color: var(--white); border: 1px solid rgba(255,255,255,0.3); padding: 12px 32px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+    .news-more a:hover { background: var(--white); color: var(--black); }
+    .news-empty { color: var(--gray-300); margin-top: 40px; }
+    @media (max-width: 640px) {
+      .news-thumb { width: 100px; height: 70px; }
+      .news-title { font-size: 14px; }
+    }
+
+    /* ── VEXA ── */
+    #vexa { background: var(--black); }
+    .vexa-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 60px; }
+    .vexa-img-area { display: flex; justify-content: center; align-items: center; background: var(--dark); border-radius: 8px; padding: 48px; min-height: 360px; }
+    .vexa-img-area img { max-width: 100%; max-height: 280px; object-fit: contain; }
+    .vexa-features { display: flex; flex-direction: column; gap: 28px; }
+    .vexa-feature { display: flex; gap: 20px; align-items: flex-start; }
+    .vexa-num { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 800; color: var(--red); line-height: 1; flex-shrink: 0; width: 36px; }
+    .vexa-feature-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .vexa-feature-body { font-size: 13px; color: var(--gray-500); line-height: 1.8; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--dark); }
+    .contact-box { background: var(--black); border: 1px solid rgba(200,16,46,0.2); border-radius: 8px; padding: 64px; text-align: center; margin-top: 60px; }
+    .contact-title { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+    .contact-sub { font-size: 15px; color: var(--gray-500); margin-bottom: 40px; }
+    .contact-info { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; }
+    .contact-item { text-align: center; }
+    .contact-item-label { font-size: 11px; color: var(--gray-500); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+    .contact-item-value { font-size: 18px; font-weight: 700; color: var(--white); }
+    .contact-item-value a { color: var(--red); text-decoration: none; }
+    .contact-item-value a:hover { text-decoration: underline; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); border-top: 1px solid rgba(255,255,255,0.06); padding: 32px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 800; color: var(--white); }
+    .footer-logo span { color: var(--red); }
+    .footer-company { font-size: 12px; color: var(--gray-500); margin-top: 4px; }
+    .footer-copy { font-size: 12px; color: var(--gray-700); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      section { padding: 64px 20px; }
+      .hero { padding: 100px 20px 64px; }
+      .hero-stats { gap: 28px; }
+      .stat-num { font-size: 32px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .spec-wrap { grid-template-columns: 1fr; }
+      .acc-grid { grid-template-columns: repeat(2, 1fr); }
+      .usecase-grid { grid-template-columns: repeat(2, 1fr); }
+      .vexa-wrap { grid-template-columns: 1fr; }
+      .contact-box { padding: 40px 24px; }
+      footer { flex-direction: column; text-align: center; }
+    }
+
+    /* COLOR VARIATION */
+    #colors { background: #0d0d0d; }
+    .color-section-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-top: 60px; }
+    .color-main-img { position: relative; }
+    .color-main-img img { width: 100%; border-radius: 8px; object-fit: contain; background: #1a1a1a; border-radius: 8px; }
+    .color-label-badge { position: absolute; bottom: 16px; left: 16px; background: rgba(0,0,0,0.7); color: var(--white); font-size: 12px; font-weight: 700; padding: 6px 14px; border-radius: 2px; letter-spacing: 0.06em; }
+    .color-thumbs { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+    .color-thumb { width: 64px; height: 64px; border-radius: 4px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s; }
+    .color-thumb:hover, .color-thumb.active { border-color: var(--red); }
+    .color-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .color-info { padding-top: 16px; }
+    .color-info h3 { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+    .color-info p { font-size: 14px; color: var(--gray-500); line-height: 1.9; margin-bottom: 32px; }
+    .color-variants { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
+    .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: border-color 0.2s, transform 0.15s; }
+    .color-dot:hover, .color-dot.active { border-color: var(--white); transform: scale(1.15); }
+    .color-dot.red { background: #C8102E; }
+    .color-dot.blue { background: #1565C0; }
+    .color-dot.green { background: #2E7D32; }
+    .color-dot.yellow { background: #F9A825; }
+    .color-dot.black { background: #333; }
+    .unit-images { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+    .unit-card { background: var(--dark); border-radius: 4px; overflow: hidden; }
+    .unit-card img { width: 100%; object-fit: contain; background: #fff; padding: 16px; box-sizing: border-box; height: 180px; }
+    .unit-card-label { font-size: 12px; font-weight: 700; color: var(--gray-300); padding: 10px 14px; letter-spacing: 0.05em; }
+    @media (max-width: 768px) {
+      .color-section-wrap { grid-template-columns: 1fr; gap: 32px; }
+      .unit-images { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // Supabase接続設定（Publishable keyは公開しても安全なキー）
+    window.SQUARE_SUPABASE_URL = 'https://adatzeolzkjujtuxebrc.supabase.co';
+    window.SQUARE_SUPABASE_KEY = 'sb_publishable_2Ghe-V3dLS7Ym06p71i33A_zFU8eJgz';
+  </script>
+</head>
+<body>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+
+<!-- NAV -->
+<nav>
+  <a href="#top" class="nav-logo"><img src="square_logo__1_.png" alt="square" style="height:28px;width:auto;display:block;filter:invert(1);"></a>
+  <ul class="nav-links">
+    <li><a href="#features">特長</a></li>
+    <li><a href="#video">動画</a></li>
+    <li><a href="#spec">仕様</a></li>
+    <li><a href="#cert">認証</a></li>
+    <li><a href="#colors">カラー</a></li>
+    <li><a href="#accessories">アクセサリ</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#vexa">VEXA</a></li>
+    <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">多人数同時通話 DECT インカム ｜ 技適取得・日本国内組立</div>
+      <h1 class="hero-logo-img"><img src="square_logo__1_.png" alt="square" style="width:min(440px,82%);height:auto;display:block;filter:invert(1);"></h1>
+      <p class="hero-catch">その声、一瞬も途切らせない。</p>
+      <p class="hero-tagline">
+        伝送遅延<strong>約0.05秒</strong>。最大<strong>8人</strong>でクリアな同時通話。<br>
+        過酷で繊細なインフラを支える、現場管理の「核」へ。
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">0.05<span class="unit">秒</span></div>
+          <div class="stat-label">超低遅延</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">8<span class="unit">人</span></div>
+          <div class="stat-label">最大同時通話</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">300<span class="unit">m</span></div>
+          <div class="stat-label">見通し通話距離</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">IPX<span class="unit">5</span></div>
+          <div class="stat-label">防水性能</div>
+        </div>
+      </div>
+      <a href="#video" class="hero-btn">動画を見る</a>
+      <a href="#contact" class="hero-btn-outline">お問い合わせ</a>
+    </div>
+    <div class="hero-visual">
+      <img class="hero-img-sub2" src="IMG_8251.jpg" alt="SQUARE DECT グリーン">
+      <img class="hero-img-sub1" src="IMG_8250.jpg" alt="SQUARE DECT ブルー">
+      <img class="hero-img-main" src="IMG_8249.jpg" alt="SQUARE DECT レッド">
+    </div>
+  </div>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <div class="section-label">Features</div>
+    <h2 class="section-title">従来インカムの悩みを解決する<br>4つの特性</h2>
+    <p class="section-sub">現場のコミュニケーションを支える重要なインフラとして、squareは真正面から課題に向き合い開発されました。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-kanji">安定</span>
+        <span class="feature-icon">📡</span>
+        <h3 class="feature-title"><span>安定性</span> ── 混雑しにくい 1.9GHz帯</h3>
+        <p class="feature-body">2.4GHz/5GHz帯（Bluetooth・Wi-Fi）との干渉がなく、人が多く集まるイベント会場や無線機を多数使用する現場でも混信のないクリアな通信を実現。伝送遅延は極めて小さい約0.05秒です。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-kanji">操作</span>
+        <span class="feature-icon">🎛️</span>
+        <h3 class="feature-title"><span>操作性</span> ── シンプルな設計で即戦力</h3>
+        <p class="feature-body">細かいチャンネル設定や煩雑な個別設定は不要。必要なのは親機と子機のペアリングのみ。音量・マイク感度・サイドトーンのオンオフはボタン一つで変更可能。現場に持ち込んだその日から使えます。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-kanji">堅牢</span>
+        <span class="feature-icon">🛡️</span>
+        <h3 class="feature-title"><span>堅牢性</span> ── 落としても雨に濡れても</h3>
+        <p class="feature-body">衝撃が集中しやすい角をコーナーガードで補強。本体だけでなくジャックやUSB端子まで防水対応（IPX5）。MIL-STD-810H準拠の落下耐性により、過酷な現場環境でのインフラをサポートします。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-kanji">機能</span>
+        <span class="feature-icon">🔵</span>
+        <h3 class="feature-title"><span>機能性</span> ── Bluetooth<sup style="font-size:0.5em;vertical-align:super;">®</sup>対応 軽量80g</h3>
+        <p class="feature-body">square本体を操作しなくてもBluetoothデバイスでトークのオン/オフが可能。胸ポケットに収まるわずか80gの軽量コンパクトボディ。イヤホンジャック装備で有線デバイスも使用可能。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section id="video">
+  <div class="container">
+    <div class="section-label">Movie</div>
+    <h2 class="section-title">square 紹介動画</h2>
+    <p class="section-sub">実際の使用シーンや操作方法をご覧ください。</p>
+    <div class="video-wrap">
+      <div class="video-embed">
+        <iframe
+          src="https://www.youtube.com/embed/vKa7bD4JtFo"
+          title="square DECT インカム 紹介動画"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div class="video-links">
+        <a href="https://www.youtube.com/watch?v=vKa7bD4JtFo" target="_blank" rel="noopener" class="video-link-btn">
+          <svg width="20" height="14" viewBox="0 0 20 14" fill="currentColor"><path d="M19.6 2.2A2.5 2.5 0 0 0 17.8.4C16.3 0 10 0 10 0S3.7 0 2.2.4A2.5 2.5 0 0 0 .4 2.2C0 3.7 0 7 0 7s0 3.3.4 4.8A2.5 2.5 0 0 0 2.2 13.6C3.7 14 10 14 10 14s6.3 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8C20 10.3 20 7 20 7s0-3.3-.4-4.8zM8 10V4l5.2 3L8 10z"/></svg>
+          YouTubeで見る
+        </a>
+      </div>
+      <p class="video-note">※ 今後、使い方の解説動画や現場導入事例の動画を順次公開予定です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- SPEC -->
+<section id="spec">
+  <div class="container">
+    <div class="section-label">Specifications</div>
+    <h2 class="section-title">製品仕様</h2>
+    <p class="section-sub">現場が求めるすべての性能を、80gのボディに凝縮しました。</p>
+    <div class="spec-wrap">
+      <table class="spec-table">
+        <tr><th>製品名</th><td class="spec-highlight">square（スクエア）</td></tr>
+        <tr><th>通信周波数帯域</th><td>1893.5〜1906.1 MHz</td></tr>
+        <tr><th>通信方式</th><td>時分割多元接続（TDMA）</td></tr>
+        <tr><th>定格出力</th><td>最大100mW</td></tr>
+        <tr><th>伝送周波数帯域</th><td>100 Hz〜7.2 kHz</td></tr>
+        <tr><th>チャンネル数</th><td>6チャンネル</td></tr>
+        <tr><th>最大同時通話人数</th><td class="spec-highlight">8人</td></tr>
+        <tr><th>通話距離</th><td class="spec-highlight">見通し約300m</td></tr>
+        <tr><th>伝送遅延</th><td class="spec-highlight">約0.05秒</td></tr>
+        <tr><th>連続使用時間</th><td>親機：最大約8時間<br>子機（有線）：最大約14時間<br>子機（Bluetooth）：最大約10時間</td></tr>
+        <tr><th>防水性能</th><td class="spec-highlight">IPX5</td></tr>
+        <tr><th>落下耐性</th><td>MIL-STD-810H 準拠</td></tr>
+        <tr><th>電池容量</th><td>850mAh / DC3.7V 充電式リチウムイオン電池</td></tr>
+        <tr><th>充電ポート</th><td>USB Type-C</td></tr>
+        <tr><th>使用温度範囲</th><td>-10〜+60℃</td></tr>
+        <tr><th>サイズ</th><td>W69 × H69 × D25 mm（クリップ含まず）</td></tr>
+        <tr><th>重量</th><td class="spec-highlight">80g</td></tr>
+        <tr><th>充電時間</th><td>約2.5時間</td></tr>
+        <tr><th>Bluetoothバージョン</th><td>Bluetooth 5.2</td></tr>
+        <tr><th>製造国</th><td>日本</td></tr>
+      </table>
+      <div class="spec-image-area">
+        <div style="text-align:center; padding: 20px 0;">
+          <div style="font-family:'Inter',sans-serif; font-size:64px; font-weight:800; color:rgba(255,255,255,0.06); letter-spacing:-0.04em; line-height:1;">square</div>
+          <div style="margin-top:24px; display:inline-flex; gap:12px; flex-wrap:wrap; justify-content:center;">
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">1.9GHz DECT</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">Bluetooth 5.2</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">IPX5</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">MIL-STD-810H</span>
+            <span style="background:rgba(200,16,46,0.1); border:1px solid rgba(200,16,46,0.3); color:#c8102e; font-size:11px; font-weight:700; padding:6px 14px; border-radius:2px; letter-spacing:0.08em;">Made in Japan</span>
+          </div>
+          <div style="margin-top:40px; font-size:13px; color:#444; line-height:1.8;">
+            カタログPDFのご請求はお問い合わせください。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATION -->
+<section id="cert">
+  <div class="container">
+    <div class="section-label">Certification &amp; Compliance</div>
+    <h2 class="section-title">安心してお使いいただくための<br>各種認証取得済み</h2>
+    <p class="section-sub">squareは日本国内での適法な使用に必要な認証、および世界標準の無線相互接続性の認証をいずれも取得済みです。認証を取得した無線機だけが、電波を発しても違法とならず、安心してご利用いただけます。</p>
+    <div class="cert-grid">
+
+      <!-- 技適（工事設計認証） -->
+      <div class="cert-card">
+        <div class="cert-head">
+          <div class="cert-mark"><div class="cert-mark-giteki">技適<br>R</div></div>
+          <div class="cert-title">技術基準適合証明（技適）取得済み<small>電波法 工事設計認証</small></div>
+        </div>
+        <span class="cert-badge-ok">✓ 日本国内で適法に使用可能</span>
+        <p class="cert-body">
+          squareは日本の電波法に基づく<strong style="color:var(--gray-300);">工事設計認証（技適）</strong>を取得済みです。技適マークが付された無線機は、無線局の免許を受けることなく、日本国内で安心してご使用いただけます。技適を取得していない海外製無線機の使用は電波法違反となる場合がありますが、squareはその心配がありません。
+        </p>
+        <div class="cert-numbers">
+          <div class="cert-num-row">
+            <span class="cert-num-label">工事設計認証番号<br><span style="font-size:11px;">（1.9GHz DECT）</span></span>
+            <span class="cert-num-value" style="color:var(--white)">R202-SMH075</span>
+          </div>
+          <div class="cert-num-row">
+            <span class="cert-num-label">工事設計認証番号<br><span style="font-size:11px;">（Bluetooth<sup style="font-size:0.7em;vertical-align:super;">®</sup>）</span></span>
+            <span class="cert-num-value" style="color:var(--white)">R018-230117</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bluetooth SIG -->
+      <div class="cert-card">
+        <div class="cert-head">
+          <div class="cert-mark">
+            <!-- ▼ Bluetooth SIG 公式フィギュアマークをここに配置（Brand Portalの正規PNGを bluetooth_mark.png としてアップロード） ▼ -->
+            <img src="bluetooth_mark.png" alt="Bluetooth" onerror="this.style.display='none';this.parentNode.innerHTML='<div style=&quot;color:#1565C0;font-family:Inter,sans-serif;font-weight:800;font-size:26px&quot;>B</div>';">
+          </div>
+          <div class="cert-title">Bluetooth<sup style="font-size:0.5em;vertical-align:super;">®</sup> SIG 認証取得済み<small>Bluetooth Qualification 完了・宣言済み</small></div>
+        </div>
+        <span class="cert-badge-ok">✓ 世界標準の相互接続性を保証</span>
+        <p class="cert-body">
+          squareは、Bluetooth<sup style="font-size:0.5em;vertical-align:super;">®</sup> Special Interest Group（SIG）の認証プロセス（Qualification）を完了し、正式に登録済みです。これは他社製のBluetooth<sup style="font-size:0.5em;vertical-align:super;">®</sup>機器との相互接続性が世界標準の仕様に適合していることを示すものです。認証済み製品はBluetooth<sup style="font-size:0.5em;vertical-align:super;">®</sup>のデータベースで確認できます。
+        </p>
+        <div class="cert-numbers">
+          <div class="cert-num-row">
+            <span class="cert-num-label">Bluetooth バージョン</span>
+            <span class="cert-num-value" style="color:var(--white)">5.2</span>
+          </div>
+          <div class="cert-num-row">
+            <span class="cert-num-label">相互接続性</span>
+            <span class="cert-num-value" style="color:var(--white)">世界標準準拠</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Made in Japan -->
+      <div class="cert-card">
+        <div class="cert-head">
+          <div class="cert-mark"><div class="cert-mark-giteki" style="color:var(--red);">JAPAN<br>MADE</div></div>
+          <div class="cert-title">日本国内で組立・検査<small>Assembled &amp; Inspected in Japan</small></div>
+        </div>
+        <span class="cert-badge-ok">✓ 一台ずつ国内で品質確認</span>
+        <p class="cert-body">
+          squareは<strong style="color:var(--gray-300);">日本国内で組み立て</strong>、出荷前に<strong style="color:var(--gray-300);">一台ずつ動作検査</strong>を行っています。現場で使う道具だからこそ、品質のばらつきを抑え、安定した通信性能をお届けします。万一の不具合時も、国内体制による迅速な修理・サポートで現場をお待たせしません。
+        </p>
+        <div class="cert-numbers">
+          <div class="cert-num-row">
+            <span class="cert-num-label">組立・検査</span>
+            <span class="cert-num-value" style="color:var(--white)">日本国内</span>
+          </div>
+          <div class="cert-num-row">
+            <span class="cert-num-label">サポート体制</span>
+            <span class="cert-num-value" style="color:var(--white)">国内対応</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="cert-note">
+      ※ 技適マーク（技術基準適合証明・工事設計認証を示すマーク）および工事設計認証番号は、square本体に表示されています。工事設計認証番号は総務省 電波利用ホームページの検索でもご確認いただけます。
+    </p>
+  </div>
+</section>
+
+<!-- ACCESSORIES -->
+
+<!-- COLOR VARIATION -->
+<section id="colors">
+  <div class="container">
+    <div class="section-label">Color Variation</div>
+    <h2 class="section-title">5色のカラーバリエーション</h2>
+    <p class="section-sub">現場のチームや用途に合わせて選べる5色展開。視認性と個性を両立させたデザインです。</p>
+    <div class="color-section-wrap">
+      <div>
+        <div class="color-main-img">
+          <img id="colorMainImg" src="IMG_8249.jpg" alt="SQUARE DECT 子機">
+          <div class="color-label-badge" id="colorLabel">RED</div>
+        </div>
+        <div class="color-thumbs">
+          <div class="color-thumb active" onclick="changeColor('IMG_8249.jpg','RED',this)"><img src="IMG_8249.jpg" alt="赤"></div>
+          <div class="color-thumb" onclick="changeColor('IMG_8250.jpg','BLUE',this)"><img src="IMG_8250.jpg" alt="青"></div>
+          <div class="color-thumb" onclick="changeColor('IMG_8251.jpg','GREEN',this)"><img src="IMG_8251.jpg" alt="緑"></div>
+          <div class="color-thumb" onclick="changeColor('IMG_8252.jpg','YELLOW',this)"><img src="IMG_8252.jpg" alt="黄"></div>
+          <div class="color-thumb" onclick="changeColor('IMG_8253.jpg','BLACK',this)"><img src="IMG_8253.jpg" alt="黒"></div>
+        </div>
+      </div>
+      <div class="color-info">
+        <h3>SQUARE DECT 子機</h3>
+        <p>防塵・防滴設計のボディに、現場での視認性を高める5色のカラーバリエーション。チームごとに色分けすることで、瞬時に役割を識別できます。</p>
+        <div class="color-variants">
+          <div class="color-dot red active" onclick="changeColor('IMG_8249.jpg','RED',null)" title="レッド"></div>
+          <div class="color-dot blue" onclick="changeColor('IMG_8250.jpg','BLUE',null)" title="ブルー"></div>
+          <div class="color-dot green" onclick="changeColor('IMG_8251.jpg','GREEN',null)" title="グリーン"></div>
+          <div class="color-dot yellow" onclick="changeColor('IMG_8252.jpg','YELLOW',null)" title="イエロー"></div>
+          <div class="color-dot black" onclick="changeColor('IMG_8253.jpg','BLACK',null)" title="ブラック"></div>
+        </div>
+        <div class="unit-images">
+          <div class="unit-card">
+            <img src="handset_slave.jpg" alt="子機">
+            <div class="unit-card-label">子機（スレーブ）</div>
+          </div>
+          <div class="unit-card">
+            <img src="handset_master.jpg" alt="親機">
+            <div class="unit-card-label">親機（マスター）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="accessories">
+  <div class="container">
+    <div class="section-label">Accessories</div>
+    <h2 class="section-title">専用アクセサリ</h2>
+    <p class="section-sub">現場環境に応じた豊富なラインナップ。有線・Bluetoothいずれにも対応します。</p>
+    <div class="acc-grid">
+      <div class="acc-card">
+        <img src="8_Tie Pin Mic.jpg" alt="タイピンマイク SSP-1130" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSP-1130</div><div class="acc-name">タイピンマイク（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="3_Helmet Headset.jpg" alt="ヘルメット装着マイク SSH-1123" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSH-1123</div><div class="acc-name">ヘルメット装着マイク（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="6_Throat Mic.jpg" alt="スロートマイク SSI-1028" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSI-1028</div><div class="acc-name">スロートマイク（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="5_Over Headset.jpg" alt="オーバーヘッドセット SSH-1117" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSH-1117</div><div class="acc-name">オーバーヘッドセット（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="7_Neckset.jpg" alt="ネックセット SSN-1059" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSN-1059</div><div class="acc-name">ネックセット（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>NO IMAGE</span></div>
+        <div class="acc-info"><div class="acc-model">SSH-1124</div><div class="acc-name">レフェリーマイク</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="9_Hand Mic.jpg" alt="ハンドマイク SSM-1041" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSM-1041</div><div class="acc-name">ハンドマイク（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="4_Earmuff Headset.jpg" alt="ヘッドセット型 SSH-1115" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSH-1115</div><div class="acc-name">ヘッドセット型（PTTボタン付）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="1_vexa_IMG_0912.jpg" alt="Bluetoothヘッドセット VEXA SSW-1121" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSW-1121</div><div class="acc-name">Bluetoothヘッドセット VEXA（ヴェクサ）</div></div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>NO IMAGE</span></div>
+        <div class="acc-info"><div class="acc-model">SSM-1071</div><div class="acc-name">ラベリアマイク</div></div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>NO IMAGE</span></div>
+        <div class="acc-info"><div class="acc-model">SSC-1246</div><div class="acc-name">ヘッドセット接続ケーブル（SSM-1041・SSH-1115用）</div></div>
+      </div>
+      <div class="acc-card">
+        <div class="acc-noimg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>NO IMAGE</span></div>
+        <div class="acc-info"><div class="acc-model">SSZ-1070-4 / -8</div><div class="acc-name">スクエア専用充電器（4台用／8台用）</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="10_Earhook Earphone.jpg" alt="耳掛けイヤホン SSE-1024" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSE-1024</div><div class="acc-name">耳掛けイヤホン</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="12_Waterproof Earphone.jpg" alt="防水イヤホン SSE-1071" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSE-1071-25 / -50</div><div class="acc-name">防水イヤホン</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="13_High sound insulation Earphone.jpg" alt="小型イヤホン SSE-1061" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSE-1061-25 / -50</div><div class="acc-name">小型イヤホン</div></div>
+      </div>
+      <div class="acc-card">
+        <img src="11_Earpaff Speaker.jpg" alt="防滴イヤスピーカー SSE-1040" loading="lazy">
+        <div class="acc-info"><div class="acc-model">SSE-1040</div><div class="acc-name">防滴イヤスピーカー（SSH-1123用）</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecase">
+  <div class="container">
+    <div class="section-label">Use Cases</div>
+    <h2 class="section-title">今、この瞬間を共有するsquare</h2>
+    <p class="section-sub">プロフェッショナルが求めるリアルタイム通信を、あらゆる現場で。</p>
+    <div class="usecase-grid">
+      <div class="usecase-card" style="background-image:url('usecase_1_construction.jpg');background-size:cover;background-position:center;">
+        <div class="usecase-text"><span class="usecase-icon">🏗️</span><div class="usecase-title">建設・工事現場</div><div class="usecase-sub">騒音環境でも高い技術とチーム連携を実現</div></div>
+      </div>
+      <div class="usecase-card" style="background-image:url('usecase_2_crane.jpg');background-size:cover;background-position:center;">
+        <div class="usecase-text"><span class="usecase-icon">🏗️</span><div class="usecase-title">クレーン作業</div><div class="usecase-sub">リアルタイムなコミュニケーションが要求される現場</div></div>
+      </div>
+      <div class="usecase-card" style="background-image:url('usecase_3_broadcast.jpg');background-size:cover;background-position:center;">
+        <div class="usecase-text"><span class="usecase-icon">📺</span><div class="usecase-title">放送業界</div><div class="usecase-sub">両手を塞がず機材操作やカメラワークに集中</div></div>
+      </div>
+      <div class="usecase-card" style="background-image:url('usecase_4_sports.jpg');background-size:cover;background-position:center;">
+        <div class="usecase-text"><span class="usecase-icon">🏆</span><div class="usecase-title">スポーツ現場</div><div class="usecase-sub">正確で迅速な判断が要求されるプロの現場</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="container">
+    <div class="section-label">News</div>
+    <h2 class="section-title">お知らせ・導入事例</h2>
+    <p class="section-sub">squareの導入事例や最新情報をお届けします。</p>
+    <div class="news-list" id="news-list">
+      <p class="news-empty">読み込み中...</p>
+    </div>
+    <div class="news-more" id="news-more" style="display:none;">
+      <a href="news.html">すべてのお知らせを見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- VEXA -->
+<section id="vexa">
+  <div class="container">
+    <div class="section-label">Option</div>
+    <h2 class="section-title">Bluetoothヘッドセット<br>VEXA（ヴェクサ）</h2>
+    <p class="section-sub">square専用のBluetoothヘッドセット。squareとの連携で、より円滑な現場管理を可能にします。</p>
+    <div class="vexa-wrap">
+      <div class="vexa-img-area">
+        <img src="1_vexa_IMG_0912.jpg" alt="VEXA Bluetoothヘッドセット SSW-1121">
+      </div>
+      <div class="vexa-features">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--gray-500);letter-spacing:0.08em;margin-bottom:8px;">MODEL</div>
+          <div style="font-size:20px;font-weight:700;">SSW-1121</div>
+          <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">連続使用時間 約14時間 / Type-C充電</div>
+        </div>
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:12px 0;">
+        <p style="font-size:13px;color:var(--gray-500);line-height:1.8;margin-bottom:8px;">プロフェッショナルのための3つのコア機能</p>
+        <div class="vexa-feature">
+          <div class="vexa-num">❶</div>
+          <div><div class="vexa-feature-title">ボイスコマンド</div><div class="vexa-feature-body">マイクのON/OFFや音量操作、電話着信応答を「声」だけで操作。手が離せない作業中でも快適なコミュニケーションが可能です。</div></div>
+        </div>
+        <div class="vexa-feature">
+          <div class="vexa-num">❷</div>
+          <div><div class="vexa-feature-title">サイドトーン</div><div class="vexa-feature-body">Bluetooth使用時でも遅延なく、違和感のない自然なサイドトーンを提供。長時間の使用でも疲れにくい設計です。</div></div>
+        </div>
+        <div class="vexa-feature">
+          <div class="vexa-num">❸</div>
+          <div><div class="vexa-feature-title">マルチポイント</div><div class="vexa-feature-body">squareとスマートフォンの同時接続に対応。squareの接続を維持したまま、スマートフォンからの電話応答が可能です。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">お問い合わせ</h2>
+    <p class="section-sub">製品に関するご質問、デモのご依頼、お見積もりなどお気軽にご連絡ください。</p>
+    <div class="contact-box">
+      <h3 class="contact-title">square についてお気軽にご相談ください</h3>
+      <p class="contact-sub">カタログPDFのご請求、導入相談、販売店のご案内も承っております。</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-value"><a href="mailto:sales@miki-kk.jp">sales@miki-kk.jp</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-label">Company</div>
+          <div class="contact-item-value">幹開発株式会社<br><span style="font-size:13px;font-weight:400;color:var(--gray-500);">MKI Engineering Co., Ltd.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo"><img src="square_logo__1_.png" alt="square" style="height:24px;width:auto;filter:invert(1);"></div>
+    <div class="footer-company">幹開発株式会社 / MKI Engineering Co., Ltd.</div>
+  </div>
+  <div class="footer-copy">&copy; 2026 MKI Engineering Co., Ltd. All rights reserved.</div>
+  <div style="flex-basis:100%;font-size:11px;color:var(--gray-700);line-height:1.7;margin-top:8px;border-top:1px solid rgba(255,255,255,0.05);padding-top:16px;">
+    The Bluetooth<sup style="font-size:0.7em;vertical-align:super;">®</sup> word mark and logos are registered trademarks owned by Bluetooth SIG, Inc. and any use of such marks by MKI Engineering Co., Ltd. is under license. Other trademarks and trade names are those of their respective owners.
+  </div>
+</footer>
+
+</div><!-- /main-content -->
+
+<script>
+  // News読み込み：Supabaseから最新3件をトップページに表示
+  (function() {
+    var sb = window.supabase.createClient(window.SQUARE_SUPABASE_URL, window.SQUARE_SUPABASE_KEY);
+    var list = document.getElementById('news-list');
+    var more = document.getElementById('news-more');
+
+    sb.from('news')
+      .select('id,date,title,thumb')
+      .order('date', { ascending: false })
+      .then(function(res) {
+        if (res.error) { throw res.error; }
+        var articles = res.data || [];
+        if (!articles.length) {
+          list.innerHTML = '<p class="news-empty">現在お知らせはありません。</p>';
+          return;
+        }
+        var latest = articles.slice(0, 3);
+        list.innerHTML = latest.map(function(a) {
+          var thumb = a.thumb
+            ? '<img class="news-thumb" src="' + a.thumb + '" alt="" loading="lazy">'
+            : '<div class="news-thumb"></div>';
+          return '<a class="news-item" href="news.html?id=' + encodeURIComponent(a.id) + '">'
+            + thumb
+            + '<div class="news-body"><div class="news-date">' + formatDate(a.date) + '</div>'
+            + '<div class="news-title">' + escapeHtml(a.title) + '</div></div>'
+            + '<div class="news-arrow">&rsaquo;</div></a>';
+        }).join('');
+        if (articles.length > 3) { more.style.display = 'block'; }
+      })
+      .catch(function() {
+        list.innerHTML = '<p class="news-empty">お知らせを読み込めませんでした。</p>';
+      });
+
+    function formatDate(d) {
+      var p = (d || '').split('-');
+      return p.length === 3 ? p[0] + '.' + p[1] + '.' + p[2] : d;
+    }
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function(c) {
+        return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+      });
+    }
+  })();
+</script>
+
+
+  <script>
+    function changeColor(src, label, thumbEl) {
+      document.getElementById('colorMainImg').src = src;
+      document.getElementById('colorLabel').textContent = label;
+      document.querySelectorAll('.color-thumb').forEach(t => t.classList.remove('active'));
+      if (thumbEl) thumbEl.classList.add('active');
+    }
+  </script>
+</body>
+</html>
